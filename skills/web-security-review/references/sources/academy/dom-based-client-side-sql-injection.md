@@ -1,0 +1,53 @@
+# DOM-based client-side SQL injection
+
+> Converted source material; attribution: PortSwigger Web Security Academy. Snapshot processed 2026-10-27.
+> Source SHA-256: `61830951a49fc19ab116b75ed90d2920e4cf99e7ff96fc8f0e866deed896333b`.
+> Conversion: Local English OCR, all 2 text segments. Source opinions and historical examples are preserved, not automatically endorsed.
+> OCR literals, payloads, and complex table alignment are not character-verified throughout. Use the curated guidance and exact-text sources for implementation; do not execute OCR examples without checking the publisher.
+
+
+> Client-side SQL injection
+
+DOM-based vulnerabilities vulnerability, and suggest ways to reduce your exposure to this kind of attack.
+
+## What is DOM-based client-side SQL injection?
+
+Client-side SQL-injection vulnerabilities arise when a script incorporates attacker-controllable data into a client-side SQL query in an unsafe way. An attacker may be able to use this vulnerability to construct a URL that, if visited by another user, will execute an arbitrary SQL query within the local SQL database of the user's browser.
+
+## What is the impact of DOM-based client-side SQL injection?
+
+The potential impact of the vulnerability depends on the website's usage of the SQL database. If the database is used to store sensitive data, such as messages on a social network, the attacker may be able to retrieve this data. If the database is used to store pending user actions, such as outgoing messages in an email application, then the attacker may be able to modify this data and perform arbitrary actions on the user's behalf.
+
+## Which sinks can lead to DOM-based client-side SQL-injection
+
+## vulnerabilities?
+
+The JavaScript database function executesql () can lead to client-side SQL-injection vulnerabilities.
+
+## How to prevent DOM-based client-side SQL-injection
+
+## vulnerabilities
+
+In addition to the general measures described on the DOM-based vulnerabilities page, you should make sure that you use parameterized queries (also known as prepared statements) for all database access. This method uses two steps to safely incorporate potentially tainted data into SQL queries:
+
+- The application specifies the structure of the query, leaving placeholders for each item of user input.
+
+- The application specifies the contents of each placeholder. As the structure of the query has already been defined in
+
+the first step, it is not possible for malformed data in the second step to interfere with the query structure.
+
+In the JavaScript executesql ( ) API, parameterized items can be designated within the query string using the query character ? . For each parameterized item, an additional parameter is passed to the API containing the item's value. To prevent oversights occurring and avoid vulnerabilities being introduced by changes elsewhere within the code base of the application, it is strongly recommended that you parameterize every variable data item that is incorporated into database queries, even if it is not obviously tainted.
+
+## Reaister for free to track vour learnina proaress
+
+---
+
+Practise exploiting vulnerabilities on realistic targets.
+
+Record your progression from Apprentice to Expert.
+
+See where you rank in our Hall of Fame.
+
+Enter your email
+
+Already got an account? Login here

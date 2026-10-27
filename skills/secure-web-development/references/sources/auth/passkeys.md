@@ -1,0 +1,20 @@
+# Passkeys
+
+> Converted source material; attribution: pilcrow, Pilcrow's auth book. Snapshot processed 2026-10-27.
+> Source SHA-256: `45fa0f514b7c383c4f5c6d6e19512078b66160ccb4f63d988670a09768008a6c`.
+> Conversion: HTML converted to Markdown; text and code preserved. Source opinions and historical examples are preserved, not automatically endorsed.
+
+
+Passkeys are secure credentials stored on a user's device or in a password manager that use public-key cryptography to authenticate users. They allow users to sign in to websites using a single master password or their device biometrics. They are significantly stronger than traditional passwords because they are unguessable, tied to a specific domain, and never share a secret with the website during authentication. I think they offer a user experience similar to using passwords with password managers, but significantly smoother and more streamlined. In fact, most password managers already support them and it removes the need for hacky input autofill.
+
+Passkeys are based on the [Web Authentication API (WebAuthn)](webauthn.md). Strictly speaking, however, there is no standardized definition of the term. It is essentially a generic, user-friendly label used to describe WebAuthn credentials.
+
+I personally define them as discoverable WebAuthn credentials that require user verification. That means the private key is stored by the authenticator (device, external hardware token, password manager) and the user needs to verify their identity (PIN code, biometrics). I believe this is how a lot of apps define them. Another common definition goes further and requires the credential to be synchronized across devices and backed up to the cloud. However, because the user experience of using them is identical on the website, I prefer including credentials stored only on-device.
+
+Passkeys can be a combination of 2 factors. If the credential is tied to the device, the credential proves ownership of a physical device and knowledge of the PIN code (or something your are via biometrics). However, we lose that physical device part when the passkey is backed up on the cloud using a password manager. As such, most passkeys are by definition not 2-factor. However, even then, it is a significantly more secure form of authentication than traditional methods. It is also very fast for the user. Here, I don't think there's much reason to strictly adhere to multi-factor authentication.
+
+Users should be allowed to register multiple passkeys. Probably at least 5, but I recommend 10 to be safe. Users should also be allowed to name their passkey. Inferring names from the device or the WebAuthn authenticator ID is great, but users should have the option to manually set the name. This is especially important for users with multiple devices or external security tokens.
+
+If you offer both passkey authentication and two-factor authentication with passwords, the user should not need to go through any other authentication methods. Passkeys are significantly stronger than traditional password-based 2FA in most scenarios.
+
+The user's identity must be verified before they can register or delete passkeys. Note that verification step doesn't necessarily have to use passkeys.

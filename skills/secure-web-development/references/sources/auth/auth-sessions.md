@@ -1,0 +1,16 @@
+# Auth sessions
+
+> Converted source material; attribution: pilcrow, Pilcrow's auth book. Snapshot processed 2026-10-27.
+> Source SHA-256: `1e33749de93eb8b593ffc1d3067acf2d64d0fed58942714d4b0b6484ad94f25e`.
+> Conversion: HTML converted to Markdown; text and code preserved. Source opinions and historical examples are preserved, not automatically endorsed.
+
+
+An auth session is a [session](sessions.md) that keeps track of the user's authentication state by holding the authenticated user ID. It is created when the client successfully signs in as a user.
+
+The expiration determines how often a user must sign in again, and the appropriate duration depends heavily on the application. You might configure auth sessions to expire after an hour, at midnight each day, or after several weeks. Another approach is to extend the expiration time whenever the session token is used, ensuring that only inactive users are signed out. If your application doesn't require the highest level of security and you want to prioritize user experience, this is likely the best strategy. To avoid excessive writes to your storage layer, I recommend refreshing the expiration periodically (e.g., once an hour or once per day) rather than on every request.
+
+Signing out should invalidate the session rather than just deleting the token from client storage. Users should have an option to sign out of their current device or sign out of all devices. This allows them to invalidate potentially hijacked sessions or sign out of stolen devices. However, users should not be able to invalidate specific sessions without first verifying their identity. A malicious actor who hijacked a session could keep signing out the valid owner and potentially lock them out from their account eternally. Treat granular session management as a high-privilege action.
+
+Whether auth sessions should be invalidated after a user updates their password is a separate discussion. My personal view is that it's a good idea to ask users whether they want to sign out of all devices immediately after changing their password, but it shouldn't be mandatory. Users often update their password because they've forgotten it or simply as a preventative measure. It's also uncommon to invalidate existing sessions when passkeys are registered or removed. If you do choose to invalidate all sessions after a password change, always make that clear so users aren't left guessing.
+
+A single authentication session, and any similar sessions, must be strictly tied to a single successful authentication event. This is relevant for post sign-in identity verification. The core purpose of identity verification is to prevent malicious actors from using stolen session tokens. However, if the existing session is re-used, an attacker could simply wait for the legitimate user to authenticate and then takeover the process. As such, I recommend using action-specific sessions for any action requiring identity verification such as updating a password, registering new passkeys, or deleting an account. This also makes it easy to ensure that the verification is single-use and strictly tied to a specific action.

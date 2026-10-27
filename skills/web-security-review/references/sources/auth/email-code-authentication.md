@@ -1,0 +1,18 @@
+# Email code authentication
+
+> Converted source material; attribution: pilcrow, Pilcrow's auth book. Snapshot processed 2026-10-27.
+> Source SHA-256: `7038933b598bd802cbf4dd912987b5ec9c6966b77a1306f0a569837c534afd5e`.
+> Conversion: HTML converted to Markdown; text and code preserved. Source opinions and historical examples are preserved, not automatically endorsed.
+
+
+An email code authentication is an authentication method where a one-time code is sent to a user's email address and the user enters that code to verify their identity. This method can also be used for password reset flows. This is my preferred option compared to using single-use verification links.
+
+For implementing this flow, I recommend creating a session for the authentication process and generating a new email code for each attempt. Binding the code to a session links the verification attempt to the device that initiated it. I also recommend not limiting the number of concurrent attempts or codes per account, as it can be used to prevent a user from signing in.
+
+The email code should have at least 40 bits of entropy. With a 32-character alphanumeric alphabet, this corresponds to an 8-character code. The code should be valid for at most one hour. The rate limit should be set to 1 attempt per minute per user. For example, use a token bucket with a maximum capacity of 5 tokens and a refill rate of 1 token per minute. With this configuration, brute-forcing the code would require around 80 billion attempts to have at least a 50% chance of guessing it. You do not need to track failed attempts either, as it does not meaningfully change the odds.
+
+To generate a code with 40 bits of entropy, first generate 8 random bytes from a cryptographically secure random source. For each byte, mask 3 bits and treat the remaining 5 bits as an integer. Map each resulting value to an alphanumeric character. I recommend using uppercase letters and numbers, excluding I, O, 0, and 1. You can also simply generate 5 bytes and use all the bits but this requires more work.
+
+The code must be hashed using a strong password hashing algorithm such as Argon2 or bcrypt. You can use a lighter configuration for the algorithm than you would for user passwords. While 40 bits of entropy is relatively high, it is still not comparable to session secrets and could be brute-forced if a fast hash like SHA-256 is used. With Argon2id with 16 MiB of memory, 3 iterations, and a parallelism of 1, for example, an attacker would need access to around 5,000 to 10,000 of the latest GPUs to brute-force it within an hour.
+
+The code should be immediately invalidated after use. It should also be invalidated when the user changes their email address.
