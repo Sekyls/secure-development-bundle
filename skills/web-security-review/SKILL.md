@@ -1,5 +1,6 @@
 ---
 name: web-security-review
+author: Dennis Sekyi Opoku
 description: "Review code changes or repositories for exploitable web-security defects, especially JavaScript/TypeScript, browser, Node.js, API, SQL, authorization, and authentication boundaries. Use for security reviews and vulnerability triage; remain read-only unless fixes are requested."
 ---
 
