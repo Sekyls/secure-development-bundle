@@ -1,5 +1,6 @@
 ---
 name: secure-web-development
+author: Dennis Sekyi Opoku
 description: "Implement and fix secure web features, especially JavaScript/TypeScript frontends, Node.js APIs, SQL data access, and business workflows. Use during feature design or coding where a concrete security boundary is involved; use a review workflow for review-only requests."
 ---
 
