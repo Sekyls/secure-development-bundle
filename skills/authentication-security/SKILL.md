@@ -1,5 +1,6 @@
 ---
 name: authentication-security
+Author: Dennis Sekyi Opoku
 description: "Design, implement, fix, or review web authentication: login, sessions, password recovery, MFA, passkeys/WebAuthn, OAuth/OIDC, and JWT validation. Use for identity-specific flows while preserving the existing provider; general object/tenant authorization uses the authorization reference."
 ---
 
